@@ -1,15 +1,9 @@
 import { Router } from "express";
-import { loggedInUserDetails, login, signUp } from "../controllers/auth-controllers";
-import { validateUserData } from "../middlewares/validation-middleware";
-import { userLoginValidationSchema, userValidationSchema } from "../validations/user-validation";
-import { authenticatingUser } from "../middlewares/token-verification";
+import { signUp } from "../controllers/auth-controllers";
 
 const authRouter = Router();
 
-authRouter.route("/signup").post(validateUserData(userValidationSchema),signUp);
+authRouter.route("/signup").post(signUp);
 
-authRouter.route("/login").post(validateUserData(userLoginValidationSchema),login);
-
-authRouter.route("/user").get(authenticatingUser, loggedInUserDetails);
 
 export default authRouter;

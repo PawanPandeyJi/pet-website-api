@@ -28,7 +28,7 @@ sequelize
     console.log("Error while sync database", error);
   });
 
-const PORT = process.env.SERVER_PORT;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`server is running on port ${PORT}`);
 });
