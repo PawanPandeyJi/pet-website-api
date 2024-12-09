@@ -2,7 +2,6 @@ import express from "express";
 import dotenv from "dotenv";
 dotenv.config();
 import { sequelize } from "./utils/db";
-
 import cors from "cors";
 import authRouter from "./routers/auth-routers";
 import { healthController } from "./controllers/health.controller";

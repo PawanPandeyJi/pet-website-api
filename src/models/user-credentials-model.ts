@@ -1,4 +1,4 @@
-import { Model, DataTypes, Optional } from "sequelize";
+import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../utils/db";
 import { User } from "./user-register-model";
 
@@ -7,15 +7,20 @@ export type CredentialAttributes = {
   email: string;
   password: string;
   userId: string;
-}
+};
 
-export type CredentialCreationAttribute  = Omit<CredentialAttributes, "id"> 
+export type CredentialCreationAttribute = Omit<CredentialAttributes, "id">;
 
-export class Credential extends Model<CredentialAttributes, CredentialCreationAttribute> implements CredentialAttributes {
+export class Credential
+  extends Model<CredentialAttributes, CredentialCreationAttribute>
+  implements CredentialAttributes
+{
   public id!: string;
   public email!: string;
   public password!: string;
   public userId!: string;
+
+  public users?: User;
 
   public readonly createAt!: Date;
   public readonly updatedAt!: Date;
@@ -23,8 +28,8 @@ export class Credential extends Model<CredentialAttributes, CredentialCreationAt
   static associate() {
     Credential.belongsTo(User, {
       foreignKey: "userId",
-      as: "users"
-    })
+      as: "users",
+    });
   }
 }
 
@@ -49,7 +54,7 @@ Credential.init(
       field: "user_id",
       references: {
         model: "users",
-        key: "id"
+        key: "id",
       },
     },
   },

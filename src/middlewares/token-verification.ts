@@ -9,7 +9,7 @@ declare module "express" {
   }
 }
 
-interface JwtPayLoad {
+type JwtPayLoad =  {
   user_id: string;
   user_firstName: string;
   user_lastName: string;
@@ -36,7 +36,7 @@ export const authenticatingUser = async (
       attributes: { exclude: ["password"] },
     });
     if (!loggedInUserDetails) {
-      res.status(404).json({ message: "User not found!" });
+      res.status(401).json({ message: "User not found!" });
     }
     req.user = loggedInUserDetails;
     next();
