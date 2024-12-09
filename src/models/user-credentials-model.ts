@@ -1,5 +1,6 @@
 import { Model, DataTypes, Optional } from "sequelize";
 import { sequelize } from "../utils/db";
+import { User } from "./user-register-model";
 
 export type CredentialAttributes = {
   id: string;
@@ -8,9 +9,9 @@ export type CredentialAttributes = {
   userId: string;
 }
 
-export type CredentialAttribute  = Optional<CredentialAttributes, "id"> 
+export type CredentialCreationAttribute  = Omit<CredentialAttributes, "id"> 
 
-export class User extends Model<CredentialAttributes, CredentialAttribute> implements CredentialAttributes {
+export class Credential extends Model<CredentialAttributes, CredentialCreationAttribute> implements CredentialAttributes {
   public id!: string;
   public email!: string;
   public password!: string;
@@ -18,9 +19,16 @@ export class User extends Model<CredentialAttributes, CredentialAttribute> imple
 
   public readonly createAt!: Date;
   public readonly updatedAt!: Date;
+
+  static associate() {
+    Credential.belongsTo(User, {
+      foreignKey: "userId",
+      as: "users"
+    })
+  }
 }
 
-User.init(
+Credential.init(
   {
     id: {
       type: DataTypes.UUID,
@@ -48,7 +56,7 @@ User.init(
 
   {
     sequelize,
-    tableName: "users",
+    tableName: "credentials",
     timestamps: true,
   }
 );

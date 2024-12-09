@@ -1,13 +1,14 @@
 import { Model, DataTypes, Optional } from "sequelize";
 import { sequelize } from "../utils/db";
+import { Credential } from "./user-credentials-model";
 
-export type UserAttributes =  {
+export type UserAttributes = {
   id: string;
   firstName: string;
   lastName: string;
-}
+};
 
-export type UserCreationAttribute = Optional<UserAttributes, "id"> 
+export type UserCreationAttribute = Omit<UserAttributes, "id">;
 
 export class User extends Model<UserAttributes, UserCreationAttribute> implements UserAttributes {
   public id!: string;
@@ -16,6 +17,13 @@ export class User extends Model<UserAttributes, UserCreationAttribute> implement
 
   public readonly createAt!: Date;
   public readonly updatedAt!: Date;
+
+  static associate() {
+    User.hasOne(Credential, {
+      foreignKey: "userId",
+      as: "credential",
+    });
+  }
 }
 
 User.init(
@@ -34,7 +42,7 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
       field: "last_name",
-    }
+    },
   },
 
   {
