@@ -1,6 +1,7 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../utils/db";
 import { Credential } from "./user-credentials-model";
+import { Pet } from "./pet-model";
 
 export type UserAttributes = {
   id: string;
@@ -24,6 +25,11 @@ export class User extends Model<UserAttributes, UserCreationAttribute> implement
     User.hasOne(Credential, {
       foreignKey: "userId",
       as: "credential",
+    });
+
+    User.hasMany(Pet, {
+      foreignKey: "userId",
+      as: "pet",
     });
   }
 }
