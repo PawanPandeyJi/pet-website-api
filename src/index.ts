@@ -12,6 +12,7 @@ import { Pet } from "./models/pet-model";
 
 const app = express();
 app.use(express.json());
+app.use(express.static('./images'));
 
 const corsPolicy = {
   origin: "*",

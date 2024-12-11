@@ -30,8 +30,6 @@ export const petValidationSchema = z.object({
   gender: z.enum(["male", "female"]),
 
   color: z.string().trim().min(2, { message: "Pet color, minimum of 2 char" }),
-
-  image: z.string(),
 });
 
 export type pet = z.infer<typeof petValidationSchema>;

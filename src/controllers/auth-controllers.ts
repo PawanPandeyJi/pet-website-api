@@ -26,7 +26,7 @@ export const signUp = async (
 
     res.status(200).json({ user, accessToken: generateAccessToken(user) });
   } catch (error) {
-    res.status(500).json({ message: "Internal server error!", error });
+    res.status(401).json(error);
   }
 };
 
@@ -43,14 +43,14 @@ export const login = async (
     const { email, password } = req.body;
     const validCredential = await Credential.findOne({
       where: { email },
-      include: [{ model: User, as: "users", attributes: ["id", "firstName", "lastName","email"] }],
+      include: [{ model: User, as: "users", attributes: ["id", "firstName", "lastName", "email"] }],
     });
     if (!validCredential || !validCredential.users) {
       res.status(401).json({ message: "Invalid credentials" });
       return;
     }
 
-    const user = validCredential.users
+    const user = validCredential.users;
     const isPasswordMatched = await compare(password, validCredential.password);
     if (validCredential && isPasswordMatched) {
       res.status(200).json({
@@ -61,15 +61,14 @@ export const login = async (
       res.status(401).json({ message: "Invalid credentials" });
     }
   } catch (error) {
-    res.status(500).json({ message: "Internal server error!" });
+    res.status(401).json(error);
   }
 };
-
 
 export const user = (req: Request, res: Response) => {
   try {
     res.status(200).json(req.user);
   } catch (error) {
-    res.status(500).json({ message: "Internal server error!", error });
+    res.status(401).json(error);
   }
 };

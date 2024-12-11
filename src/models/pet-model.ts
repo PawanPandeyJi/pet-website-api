@@ -12,6 +12,7 @@ export type PetAttributes = {
   gender: string;
   color: string;
   image: string;
+  isDeleted?: boolean;
   userId: string;
 };
 
@@ -28,6 +29,7 @@ export class Pet extends Model<PetAttributes, PetCreationAttribute> implements P
   public color!: string;
   public image!: string;
   public userId!: string;
+  public isDeleted!: boolean;
 
   public readonly createAt!: Date;
   public readonly updatedAt!: Date;
@@ -86,6 +88,12 @@ Pet.init(
       type: DataTypes.STRING,
       allowNull: false,
       field: "pet_image",
+    },
+    isDeleted: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+      field: "is_deleted",
     },
     userId: {
       type: DataTypes.UUID,
