@@ -3,13 +3,16 @@ import dotenv from "dotenv";
 dotenv.config();
 import { sequelize } from "./utils/db";
 import cors from "cors";
-import authRouter from "./routers/auth-routers";
+import authRouter from "./routers/user-auth-routers";
 import { healthController } from "./controllers/health.controller";
 import { User } from "./models/user-register-model";
 import { Credential } from "./models/user-credentials-model";
+import userRouter from "./routers/user-router";
+import { Pet } from "./models/pet-model";
 
 const app = express();
 app.use(express.json());
+app.use(express.static('./images'));
 
 const corsPolicy = {
   origin: "*",
@@ -20,6 +23,7 @@ app.use(cors(corsPolicy));
 
 app.get("/health", healthController);
 app.use("/api/auth/", authRouter);
+app.use("/api/user/", userRouter);
 
 sequelize
   .sync({ alter: true })
@@ -36,3 +40,4 @@ app.listen(PORT, () => {
 });
 User.associate();
 Credential.associate();
+Pet.associate();
