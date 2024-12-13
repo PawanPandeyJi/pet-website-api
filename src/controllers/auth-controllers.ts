@@ -24,7 +24,7 @@ export const signUp = async (
 
     await createUser(req.body, user);
 
-    res.status(200).json({ user, accessToken: generateAccessToken(user) });
+    res.status(200).json({ user, token: generateAccessToken(user) });
   } catch (error) {
     res.status(401).json(error);
   }
@@ -33,6 +33,7 @@ export const signUp = async (
 export type LoginReqBody = {
   email: string;
   password: string;
+  type: string;
 };
 
 export const login = async (
@@ -40,9 +41,9 @@ export const login = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { email, password } = req.body;
+    const { email, password, type } = req.body;
     const validCredential = await Credential.findOne({
-      where: { email },
+      where: { email, type },
       include: [{ model: User, as: "users", attributes: ["id", "firstName", "lastName", "email"] }],
     });
     if (!validCredential || !validCredential.users) {

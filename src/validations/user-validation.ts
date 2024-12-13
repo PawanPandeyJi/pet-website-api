@@ -27,6 +27,7 @@ export const userValidationSchema = z.object({
       (val) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(val),
       { message: "Password must like: Example@123" }
     ),
+  type: z.enum(["user", "doctor"]),
 });
 
 export type user = z.infer<typeof userValidationSchema>;
@@ -39,6 +40,7 @@ export const userLoginValidationSchema = z.object({
       (val) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(val),
       { message: "Password must like: Example@123" }
     ),
+  type: z.enum(["user", "doctor"]),
 });
 
 export type userLogin = z.infer<typeof userLoginValidationSchema>;

@@ -2,12 +2,14 @@ import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../utils/db";
 import { Credential } from "./user-credentials-model";
 import { Pet } from "./pet-model";
+import { Doctor } from "./doctor-model";
 
 export type UserAttributes = {
   id: string;
   firstName: string;
   lastName: string;
   email: string;
+
 };
 
 export type UserCreationAttribute = Omit<UserAttributes, "id">;
@@ -17,6 +19,7 @@ export class User extends Model<UserAttributes, UserCreationAttribute> implement
   public firstName!: string;
   public lastName!: string;
   public email!: string;
+
 
   public readonly createAt!: Date;
   public readonly updatedAt!: Date;
@@ -31,6 +34,11 @@ export class User extends Model<UserAttributes, UserCreationAttribute> implement
       foreignKey: "userId",
       as: "pet",
     });
+
+    User.hasOne(Doctor, {
+      foreignKey: "userId",
+      as: "doctorRegistraion"
+    })
   }
 }
 

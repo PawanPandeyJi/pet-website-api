@@ -6,6 +6,7 @@ export type CredentialAttributes = {
   id: string;
   email: string;
   password: string;
+  type?: string;
   userId: string;
 };
 
@@ -18,6 +19,7 @@ export class Credential
   public id!: string;
   public email!: string;
   public password!: string;
+  public type!: string;
   public userId!: string;
 
   public users?: User;
@@ -47,6 +49,10 @@ Credential.init(
     password: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    type: {
+      type: DataTypes.ENUM("user", "doctor"),
+      allowNull: true,
     },
     userId: {
       type: DataTypes.UUID,

@@ -9,10 +9,13 @@ import { User } from "./models/user-register-model";
 import { Credential } from "./models/user-credentials-model";
 import userRouter from "./routers/user-router";
 import { Pet } from "./models/pet-model";
+import { Doctor } from "./models/doctor-model";
+import { DoctorShedule } from "./models/doctor-shedule-model";
+import doctorRouter from "./routers/doctor-router";
 
 const app = express();
 app.use(express.json());
-app.use(express.static('./images'));
+app.use(express.static("./images"));
 
 const corsPolicy = {
   origin: "*",
@@ -24,6 +27,7 @@ app.use(cors(corsPolicy));
 app.get("/health", healthController);
 app.use("/api/auth/", authRouter);
 app.use("/api/user/", userRouter);
+app.use("/api/doctor/", doctorRouter);
 
 sequelize
   .sync({ alter: true })
@@ -41,3 +45,5 @@ app.listen(PORT, () => {
 User.associate();
 Credential.associate();
 Pet.associate();
+Doctor.associate();
+DoctorShedule.associate();

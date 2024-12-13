@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { verify } from "jsonwebtoken";
+import { TokenExpiredError, verify } from "jsonwebtoken";
 import { getENV } from "../utils/envCheck";
 import { User } from "../models/user-register-model";
 
@@ -9,14 +9,14 @@ declare module "express" {
   }
 }
 
-type JwtPayLoad =  {
+type JwtPayLoad = {
   user_id: string;
   user_firstName: string;
   user_lastName: string;
   user_email: string;
   iat?: number;
   exp?: number;
-}
+};
 
 export const authenticatingUser = async (
   req: Request,
@@ -41,6 +41,10 @@ export const authenticatingUser = async (
     req.user = loggedInUserDetails;
     next();
   } catch (error) {
-    res.status(500).json({ message: "internal server error", error });
+    if (error instanceof TokenExpiredError) {
+      res.status(401).json({ message: "Token has expired!" });
+    } else {
+      res.status(500).json({ message: "Internal server error", error });
+    }
   }
 };
