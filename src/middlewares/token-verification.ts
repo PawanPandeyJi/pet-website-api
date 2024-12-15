@@ -24,7 +24,7 @@ export const authenticatingUser =
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const token = req.header("Authorization")?.replace("Bearer", "").trim();
     if (!token) {
-      res.status(409).json({ message: "Unathorized user, token not provided!" });
+      res.status(401).json({ message: "Unathorized user, token not provided!" });
       return;
     }
     try {
