@@ -57,37 +57,30 @@ Pet.init(
     age: {
       type: DataTypes.STRING,
       allowNull: false,
-      field: "pet_age",
     },
     breed: {
       type: DataTypes.STRING,
       allowNull: false,
-      field: "pet_breed",
     },
     weight: {
       type: DataTypes.STRING,
       allowNull: false,
-      field: "pet_weight",
     },
     type: {
       type: DataTypes.STRING,
       allowNull: false,
-      field: "pet_type",
     },
     gender: {
       type: DataTypes.ENUM("male", "female"),
       allowNull: false,
-      field: "pet_gender",
     },
     color: {
       type: DataTypes.STRING,
       allowNull: false,
-      field: "pet_color",
     },
     image: {
       type: DataTypes.STRING,
       allowNull: false,
-      field: "pet_image",
     },
     isDeleted: {
       type: DataTypes.BOOLEAN,

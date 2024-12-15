@@ -32,5 +32,6 @@ export const doctorValidationSchema = z.object({
   availableDays: z
     .array(z.enum(["mon", "tue", "wed", "thu", "fri", "sat", "sun"]))
     .nonempty({ message: "Available Days must have at least one day" }),
-  availableTime: z.string().nonempty({ message: "Time is required!" }),
+  availableTimeFrom: z.string().nonempty({ message: "Time is required!" }),
+  availableTimeTo: z.string().nonempty({ message: "Time is required!" }),
 });

@@ -4,6 +4,8 @@ import path from "path";
 import fs from "fs";
 import mime from "mime";
 import { User } from "../models/user-register-model";
+import { Doctor } from "../models/doctor-model";
+import { DoctorShedule } from "../models/doctor-shedule-model";
 export const petRegistration = async (
   req: Request<Record<string, string>, void, PetCreationAttribute>,
   res: Response
@@ -95,6 +97,20 @@ export const deletePet = async (req: Request, res: Response): Promise<void> => {
     const petId = req.params.id;
     await Pet.update({ isDeleted: true }, { where: { userId, id: petId, isDeleted: false } });
     res.status(200).json({ message: "Pet deleted!" });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error!", error });
+  }
+};
+
+export const getDoctors = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const doctors = await Doctor.findAll({
+      include: [
+        { model: DoctorShedule, as: "DoctorShedule" },
+        { model: User, as: "userAsDoctor" },
+      ],
+    });
+    res.status(200).json(doctors);
   } catch (error) {
     res.status(500).json({ message: "Internal server error!", error });
   }

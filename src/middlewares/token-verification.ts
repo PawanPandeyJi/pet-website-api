@@ -10,18 +10,17 @@ declare module "express" {
 }
 
 type JwtPayLoad = {
-  user_id: string;
-  user_firstName: string;
-  user_lastName: string;
-  user_email: string;
-  user_type: string;
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  type: string;
   iat?: number;
   exp?: number;
 };
 
-
 export const authenticatingUser =
-  (userType: UserType|"*") =>
+  (userType: UserType | "*") =>
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const token = req.header("Authorization")?.replace("Bearer", "").trim();
     if (!token) {
@@ -31,12 +30,19 @@ export const authenticatingUser =
     try {
       const secretKey = getENV("JWT_SECRET_KEY");
       const decodeToken = verify(token, secretKey) as JwtPayLoad;
-        const user = await User.findOne({
-          where: { id: decodeToken.user_id,type: decodeToken.user_type },
-        });
-
+      if (userType === "*") {
+        (userType as string) = decodeToken.type;
+      }
+      const user = await User.findOne({
+        where: { id: decodeToken.id, type: userType },
+      });
       if (!user) {
         res.status(401).json({ message: "User not found!" });
+        return;
+      }
+      if (user?.type !== userType) {
+        res.status(403).json({ message: `Token is a ${userType} type` });
+        return;
       }
       req.user = user;
       next();

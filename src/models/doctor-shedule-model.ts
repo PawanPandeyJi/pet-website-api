@@ -5,7 +5,8 @@ import { Doctor } from "./doctor-model";
 export type DoctorSheduleAttribute = {
   id: string;
   availableDays: string;
-  availableTime: string;
+  availableTimeFrom: string;
+  availableTimeTo: string;
   doctorId: string;
 };
 
@@ -17,7 +18,8 @@ export class DoctorShedule
 {
   public id!: string;
   public availableDays!: string;
-  public availableTime!: string;
+  public availableTimeFrom!: string;
+  public availableTimeTo!: string;
   public doctorId!: string;
 
   public readonly createAt!: Date;
@@ -43,7 +45,11 @@ DoctorShedule.init(
       type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: false,
     },
-    availableTime: {
+    availableTimeFrom: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    availableTimeTo: {
       type: DataTypes.STRING,
       allowNull: false,
     },

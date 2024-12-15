@@ -48,7 +48,7 @@ export class Doctor
       as: "DoctorShedule",
     });
     Doctor.belongsTo(User, {
-      foreignKey: "id",
+      foreignKey: "userId",
       as: "userAsDoctor",
     });
   }
@@ -94,22 +94,27 @@ Doctor.init(
     profileImage: {
       type: DataTypes.STRING,
       allowNull: true,
+      field: "profile_image",
     },
     certificateImage: {
       type: DataTypes.STRING,
       allowNull: true,
+      field: "certificate_image",
     },
     isDeleted: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
+      field: "is_deleted",
     },
     isApproved: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
+      field: "is_approved",
     },
     userId: {
       type: DataTypes.UUID,
       allowNull: false,
+      field: "user_id",
       references: {
         model: "users",
         key: "id",

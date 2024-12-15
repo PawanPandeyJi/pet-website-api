@@ -6,11 +6,11 @@ export const generateAccessToken = (user: UserAttributes) => {
     throw new Error("Process env not set : JWT_SECRET_KEY");
   }
   const payLoad = {
-    user_id: user.id,
-    user_firstName: user.firstName,
-    user_lastName: user.lastName,
-    user_email: user.email,
-    user_type: user.type,
+    id: user.id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    type: user.type,
   };
   return jwt.sign(payLoad, process.env.JWT_SECRET_KEY, {
     expiresIn: "30m",

@@ -42,7 +42,7 @@ export const login = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { email, password, type } = req.body;
+    const { email, password } = req.body;
     const validCredential = await Credential.findOne({
       where: { email },
       include: [
