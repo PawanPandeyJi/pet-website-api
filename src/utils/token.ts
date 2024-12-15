@@ -10,6 +10,7 @@ export const generateAccessToken = (user: UserAttributes) => {
     user_firstName: user.firstName,
     user_lastName: user.lastName,
     user_email: user.email,
+    user_type: user.type,
   };
   return jwt.sign(payLoad, process.env.JWT_SECRET_KEY, {
     expiresIn: "30m",

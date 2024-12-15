@@ -40,7 +40,7 @@ DoctorShedule.init(
       allowNull: false,
     },
     availableDays: {
-      type: DataTypes.ENUM("mon", "tue", "wed", "thus", "fri", "sat", "sun"),
+      type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: false,
     },
     availableTime: {

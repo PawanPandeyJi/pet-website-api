@@ -8,8 +8,7 @@ export const validateUserData =
       next();
     } catch (error) {
       if (error instanceof z.ZodError) {
-        res.status(400).json({ error });
-        console.log(error);
+        res.status(400).json({ message: error.errors[0].message,error });
       } else {
         res.status(500).json("Internal server error");
       }

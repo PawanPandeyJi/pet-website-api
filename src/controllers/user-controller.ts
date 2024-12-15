@@ -87,8 +87,8 @@ export const deletePet = async (req: Request, res: Response): Promise<void> => {
       return;
     }
     const userId = req.user.id;
-    const isAuthorized = await User.findOne({ where: { id: userId } });
-    if (!isAuthorized) {
+    const authorizedUser = await User.findOne({ where: { id: userId } });
+    if (!authorizedUser) {
       res.status(401).json({ message: "Unauthrized user!" });
       return;
     }

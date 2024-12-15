@@ -28,6 +28,9 @@ export const doctorValidationSchema = z.object({
   certificateImage: z.string().url({ message: "Certificate Image must be a valid URL" }).optional(),
   isDeleted: z.boolean().optional(),
   isApproved: z.boolean().optional(),
-  availableDays: z.enum(["mon", "tue", "wed", "thus", "fri", "sat", "sun"]),
-  availableTime: z.string(),
+  // availableDays: z.enum([]),
+  availableDays: z
+    .array(z.enum(["mon", "tue", "wed", "thu", "fri", "sat", "sun"]))
+    .nonempty({ message: "Available Days must have at least one day" }),
+  availableTime: z.string().nonempty({ message: "Time is required!" }),
 });

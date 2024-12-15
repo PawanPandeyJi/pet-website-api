@@ -4,12 +4,17 @@ import { Credential } from "./user-credentials-model";
 import { Pet } from "./pet-model";
 import { Doctor } from "./doctor-model";
 
+export enum UserType {
+  Doctor = "doctor",
+  User = "user",
+}
+
 export type UserAttributes = {
   id: string;
   firstName: string;
   lastName: string;
   email: string;
-
+  type?: UserType;
 };
 
 export type UserCreationAttribute = Omit<UserAttributes, "id">;
@@ -19,7 +24,7 @@ export class User extends Model<UserAttributes, UserCreationAttribute> implement
   public firstName!: string;
   public lastName!: string;
   public email!: string;
-
+  public type!: UserType;
 
   public readonly createAt!: Date;
   public readonly updatedAt!: Date;
@@ -37,8 +42,8 @@ export class User extends Model<UserAttributes, UserCreationAttribute> implement
 
     User.hasOne(Doctor, {
       foreignKey: "userId",
-      as: "doctorRegistraion"
-    })
+      as: "doctorRegistraion",
+    });
   }
 }
 
@@ -62,6 +67,10 @@ User.init(
     email: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    type: {
+      type: DataTypes.ENUM("user", "doctor"),
+      allowNull: true,
     },
   },
 

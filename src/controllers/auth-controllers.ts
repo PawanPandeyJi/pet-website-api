@@ -20,6 +20,7 @@ export const signUp = async (
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       email: req.body.email,
+      type: req.body.type,
     });
 
     await createUser(req.body, user);
@@ -43,8 +44,10 @@ export const login = async (
   try {
     const { email, password, type } = req.body;
     const validCredential = await Credential.findOne({
-      where: { email, type },
-      include: [{ model: User, as: "users", attributes: ["id", "firstName", "lastName", "email"] }],
+      where: { email },
+      include: [
+        { model: User, as: "users", attributes: ["id", "firstName", "lastName", "email", "type"] },
+      ],
     });
     if (!validCredential || !validCredential.users) {
       res.status(401).json({ message: "Invalid credentials" });
