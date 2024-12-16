@@ -7,7 +7,7 @@ import authRouter from "./routers/user-auth-routers";
 import { healthController } from "./controllers/health.controller";
 import { User } from "./models/user-register-model";
 import { Credential } from "./models/user-credentials-model";
-import userRouter from "./routers/user-router";
+import petRouter from "./routers/pet-routers";
 import { Pet } from "./models/pet-model";
 import { Doctor } from "./models/doctor-model";
 import { DoctorShedule } from "./models/doctor-shedule-model";
@@ -25,9 +25,9 @@ const corsPolicy = {
 app.use(cors(corsPolicy));
 
 app.get("/health", healthController);
-app.use("/api/auth/", authRouter);
-app.use("/api/user/", userRouter);
-app.use("/api/doctor/", doctorRouter);
+app.use("/auth/", authRouter);
+app.use(petRouter);
+app.use(doctorRouter);
 
 sequelize
   .sync({ alter: true })

@@ -11,7 +11,7 @@ import { petValidationSchema } from "../validations/pet-validation";
 import multer from "multer";
 import { UserType } from "../models/user-register-model";
 
-const userRouter = Router();
+const petRouter = Router();
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -24,7 +24,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-userRouter
+petRouter
   .route("/pet")
   .post(
     authenticatingUser(UserType.User),
@@ -33,8 +33,8 @@ userRouter
     petRegistration
   );
 
-userRouter.route("/pet").get(authenticatingUser(UserType.User), gettingPetDetails);
-userRouter.route("/pet/:id").put(authenticatingUser(UserType.User), deletePet);
-userRouter.route("/doctor").get(getDoctors);
+petRouter.route("/pet").get(authenticatingUser(UserType.User), gettingPetDetails);
+petRouter.route("/pet/:id").put(authenticatingUser(UserType.User), deletePet);
+petRouter.route("/doctors").get(getDoctors);
 
-export default userRouter;
+export default petRouter;

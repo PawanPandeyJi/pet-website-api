@@ -3,8 +3,6 @@ import { login, signUp, user } from "../controllers/auth-controllers";
 import { validateUserData } from "../middlewares/validation-middleware";
 import { userLoginValidationSchema, userValidationSchema } from "../validations/user-validation";
 import { authenticatingUser } from "../middlewares/token-verification";
-import { UserType } from "../models/user-register-model";
-import { Doctor } from "../models/doctor-model";
 
 const authRouter = Router();
 

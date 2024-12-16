@@ -6,7 +6,6 @@ import multer from "multer";
 import { authenticatingUser } from "../middlewares/token-verification";
 import { UserType } from "../models/user-register-model";
 
-
 const doctorRouter = Router();
 
 const storage = multer.diskStorage({
@@ -21,7 +20,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 doctorRouter
-  .route("/register")
+  .route("/doctor")
   .post(
     authenticatingUser(UserType.Doctor),
     upload.fields([{ name: "profileImage" }, { name: "certificateImage" }]),
@@ -29,6 +28,6 @@ doctorRouter
     registerDoctor
   );
 
-doctorRouter.route("/profile").get(authenticatingUser(UserType.Doctor), getDoctorDetails);
+doctorRouter.route("/doctor").get(authenticatingUser(UserType.Doctor), getDoctorDetails);
 
 export default doctorRouter;

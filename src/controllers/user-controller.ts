@@ -110,7 +110,11 @@ export const getDoctors = async (req: Request, res: Response): Promise<void> => 
         { model: User, as: "userAsDoctor" },
       ],
     });
-    res.status(200).json(doctors);
+    const profileImages = doctors.map((image) => {
+      image.profileImage = getImage(image.profileImage);
+      return image;
+    });
+    res.status(200).json(profileImages);
   } catch (error) {
     res.status(500).json({ message: "Internal server error!", error });
   }
