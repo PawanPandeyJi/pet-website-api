@@ -42,13 +42,17 @@ export const login = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { email, password } = req.body;
+    const { email, password, type } = req.body;
     const validCredential = await Credential.findOne({
       where: { email },
       include: [
         { model: User, as: "users", attributes: ["id", "firstName", "lastName", "email", "type"] },
       ],
     });
+    if (validCredential?.users?.type !== type) {
+      res.status(401).json({ message: "Invalid credentials" });
+      return;
+    }
     if (!validCredential || !validCredential.users) {
       res.status(401).json({ message: "Invalid credentials" });
       return;

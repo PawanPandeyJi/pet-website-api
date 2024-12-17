@@ -113,7 +113,6 @@ export const getDoctorDetails = async (req: Request, res: Response) => {
 const getImage = (key: string): string => {
   try {
     const buf = fs.readFileSync(path.join("images", key));
-    console.log(buf);
     const mimeType = mime.lookup(key);
     return `data:${mimeType};base64,${buf.toString("base64")}`;
   } catch (error) {

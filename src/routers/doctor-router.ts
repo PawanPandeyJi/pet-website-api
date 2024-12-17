@@ -3,7 +3,7 @@ import { validateUserData } from "../middlewares/validation-middleware";
 import { doctorValidationSchema } from "../validations/doctor-validation";
 import { registerDoctor, getDoctorDetails } from "../controllers/doctor-controller";
 import multer from "multer";
-import { authenticatingUser } from "../middlewares/token-verification";
+import { authenticateUser } from "../middlewares/token-verification";
 import { UserType } from "../models/user-register-model";
 
 const doctorRouter = Router();
@@ -22,12 +22,12 @@ const upload = multer({ storage });
 doctorRouter
   .route("/doctor")
   .post(
-    authenticatingUser(UserType.Doctor),
+    authenticateUser(UserType.Doctor),
     upload.fields([{ name: "profileImage" }, { name: "certificateImage" }]),
     validateUserData(doctorValidationSchema),
     registerDoctor
   );
 
-doctorRouter.route("/doctor").get(authenticatingUser(UserType.Doctor), getDoctorDetails);
+doctorRouter.route("/doctor").get(authenticateUser(UserType.Doctor), getDoctorDetails);
 
 export default doctorRouter;

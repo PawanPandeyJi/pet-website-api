@@ -5,7 +5,7 @@ import {
   gettingPetDetails,
   petRegistration,
 } from "../controllers/user-controller";
-import { authenticatingUser } from "../middlewares/token-verification";
+import { authenticateUser } from "../middlewares/token-verification";
 import { validateUserData } from "../middlewares/validation-middleware";
 import { petValidationSchema } from "../validations/pet-validation";
 import multer from "multer";
@@ -27,14 +27,14 @@ const upload = multer({ storage });
 petRouter
   .route("/pet")
   .post(
-    authenticatingUser(UserType.User),
+    authenticateUser(UserType.User),
     upload.single("image"),
     validateUserData(petValidationSchema),
     petRegistration
   );
 
-petRouter.route("/pet").get(authenticatingUser(UserType.User), gettingPetDetails);
-petRouter.route("/pet/:id").put(authenticatingUser(UserType.User), deletePet);
+petRouter.route("/pet").get(authenticateUser(UserType.User), gettingPetDetails);
+petRouter.route("/pet/:id").put(authenticateUser(UserType.User), deletePet);
 petRouter.route("/doctors").get(getDoctors);
 
 export default petRouter;

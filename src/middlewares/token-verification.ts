@@ -19,7 +19,7 @@ type JwtPayLoad = {
   exp?: number;
 };
 
-export const authenticatingUser =
+export const authenticateUser =
   (userType: UserType | "*") =>
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const token = req.header("Authorization")?.replace("Bearer", "").trim();
@@ -31,7 +31,7 @@ export const authenticatingUser =
       const secretKey = getENV("JWT_SECRET_KEY");
       const decodeToken = verify(token, secretKey) as JwtPayLoad;
       if (userType === "*") {
-        (userType as string) = decodeToken.type;
+        userType = decodeToken.type as UserType;
       }
       const user = await User.findOne({
         where: { id: decodeToken.id, type: userType },
