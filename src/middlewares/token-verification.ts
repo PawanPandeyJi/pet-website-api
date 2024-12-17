@@ -30,18 +30,19 @@ export const authenticateUser =
     try {
       const secretKey = getENV("JWT_SECRET_KEY");
       const decodeToken = verify(token, secretKey) as JwtPayLoad;
+      const tokenUserType = decodeToken.type;
       if (userType === "*") {
-        userType = decodeToken.type as UserType;
+        tokenUserType;
       }
       const user = await User.findOne({
-        where: { id: decodeToken.id, type: userType },
+        where: { id: decodeToken.id, type: tokenUserType },
       });
       if (!user) {
         res.status(401).json({ message: "User not found!" });
         return;
       }
-      if (user?.type !== userType) {
-        res.status(403).json({ message: `Token is a ${userType} type` });
+      if (user?.type !== tokenUserType) {
+        res.status(403).json({ message: `Token is a ${tokenUserType} type` });
         return;
       }
       req.user = user;
