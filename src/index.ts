@@ -12,6 +12,7 @@ import { Pet } from "./models/pet-model";
 import { Doctor } from "./models/doctor-model";
 import { DoctorShedule } from "./models/doctor-shedule-model";
 import doctorRouter from "./routers/doctor-router";
+import { Appointment } from "./models/appointment-model";
 
 const app = express();
 app.use(express.json());
@@ -47,3 +48,4 @@ Credential.associate();
 Pet.associate();
 Doctor.associate();
 DoctorShedule.associate();
+Appointment.associate();

@@ -1,6 +1,7 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../utils/db";
 import { User } from "./user-register-model";
+import { Appointment } from "./appointment-model";
 
 export type PetAttributes = {
   id: string;
@@ -39,6 +40,10 @@ export class Pet extends Model<PetAttributes, PetCreationAttribute> implements P
       foreignKey: "userId",
       as: "pet",
     });
+    Pet.hasMany(Appointment, {
+      foreignKey: "petId",
+      as: "petAppointments"
+    })
   }
 }
 

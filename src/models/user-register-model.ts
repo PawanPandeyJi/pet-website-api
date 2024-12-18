@@ -3,6 +3,7 @@ import { sequelize } from "../utils/db";
 import { Credential } from "./user-credentials-model";
 import { Pet } from "./pet-model";
 import { Doctor } from "./doctor-model";
+import { Appointment } from "./appointment-model";
 
 export enum UserType {
   Doctor = "doctor",
@@ -44,6 +45,11 @@ export class User extends Model<UserAttributes, UserCreationAttribute> implement
       foreignKey: "userId",
       as: "doctorRegistraion",
     });
+
+    User.hasMany(Appointment, {
+      foreignKey: "userId",
+      as: "userPetAppointment"
+    })
   }
 }
 

@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  createAppointment,
   deletePet,
   getDoctors,
   gettingPetDetails,
@@ -10,6 +11,7 @@ import { validateUserData } from "../middlewares/validation-middleware";
 import { petValidationSchema } from "../validations/pet-validation";
 import multer from "multer";
 import { UserType } from "../models/user-register-model";
+import { appointmentSchema } from "../validations/appointment-validation";
 
 const petRouter = Router();
 
@@ -36,5 +38,8 @@ petRouter
 petRouter.route("/pet").get(authenticateUser(UserType.User), gettingPetDetails);
 petRouter.route("/pet/:id").put(authenticateUser(UserType.User), deletePet);
 petRouter.route("/doctors").get(getDoctors);
+petRouter
+  .route("/appointment")
+  .post(authenticateUser(UserType.User), validateUserData(appointmentSchema), createAppointment);
 
 export default petRouter;

@@ -2,6 +2,7 @@ import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../utils/db";
 import { DoctorShedule } from "./doctor-shedule-model";
 import { User } from "./user-register-model";
+import { Appointment } from "./appointment-model";
 
 export type DoctorAttribute = {
   id: string;
@@ -51,6 +52,10 @@ export class Doctor
       foreignKey: "userId",
       as: "userAsDoctor",
     });
+    Doctor.hasMany(Appointment, {
+      foreignKey: "doctorId",
+      as: "doctorAppointments"
+    })
   }
 }
 
