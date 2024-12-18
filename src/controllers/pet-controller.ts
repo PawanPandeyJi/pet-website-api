@@ -160,7 +160,6 @@ export const getAppointments = async (req: Request, res: Response): Promise<void
     const appointments = await Appointment.findAll({
       where: { userId },
       include: [
-        { model: User, as: "appointmentOfUserPet" },
         {
           model: Doctor,
           as: "appointmentToDoctor",
@@ -170,7 +169,7 @@ export const getAppointments = async (req: Request, res: Response): Promise<void
       ],
     });
 
-    res.status(200).json({ appointments });
+    res.status(200).json(appointments);
   } catch (error) {
     res.status(500).json({ message: "Internal server error!", error });
     console.log(error);
