@@ -2,10 +2,11 @@ import { Router } from "express";
 import {
   createAppointment,
   deletePet,
+  getAppointments,
   getDoctors,
   gettingPetDetails,
   petRegistration,
-} from "../controllers/user-controller";
+} from "../controllers/pet-controller";
 import { authenticateUser } from "../middlewares/token-verification";
 import { validateUserData } from "../middlewares/validation-middleware";
 import { petValidationSchema } from "../validations/pet-validation";
@@ -41,5 +42,8 @@ petRouter.route("/doctors").get(getDoctors);
 petRouter
   .route("/appointment")
   .post(authenticateUser(UserType.User), validateUserData(appointmentSchema), createAppointment);
+petRouter
+  .route("/appointments")
+  .get(authenticateUser(UserType.User), getAppointments);
 
 export default petRouter;

@@ -7,6 +7,7 @@ import { User } from "../models/user-register-model";
 import { Doctor } from "../models/doctor-model";
 import { DoctorShedule } from "../models/doctor-shedule-model";
 import { Appointment, AppointmentCreationAttribute } from "../models/appointment-model";
+import { model } from "mongoose";
 export const petRegistration = async (
   req: Request<Record<string, string>, void, PetCreationAttribute>,
   res: Response
@@ -141,5 +142,37 @@ export const createAppointment = async (
     res.status(201).json({ appointment });
   } catch (error) {
     res.status(500).json({ message: "Internal server error!", error });
+  }
+};
+
+export const getAppointments = async (req: Request, res: Response): Promise<void> => {
+  try {
+    if (!req.user) {
+      res.status(409).json({ message: "No logged in user found" });
+      return;
+    }
+    const userId = req.user.id;
+    const authorizedUser = await User.findOne({ where: { id: userId } });
+    if (!authorizedUser) {
+      res.status(401).json({ message: "Unauthrized user!" });
+      return;
+    }
+    const appointments = await Appointment.findAll({
+      where: { userId },
+      include: [
+        { model: User, as: "appointmentOfUserPet" },
+        {
+          model: Doctor,
+          as: "appointmentToDoctor",
+          include: [{ model: User, as: "userAsDoctor" }],
+        },
+        { model: Pet, as: "appointmentToPet" },
+      ],
+    });
+
+    res.status(200).json({ appointments });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error!", error });
+    console.log(error);
   }
 };
