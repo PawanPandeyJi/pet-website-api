@@ -10,6 +10,9 @@ export type AppointmentAttribute = {
   doctorId: string;
   petId: string;
   appointmentDay: string;
+  isCanceled?: boolean;
+  appointmentToPet?: {};
+  appointmentToDoctor?: {};
 };
 
 export type AppointmentCreationAttribute = Omit<AppointmentAttribute, "id">;
@@ -23,23 +26,26 @@ export class Appointment
   public doctorId!: string;
   public petId!: string;
   public appointmentDay!: string;
+  public isCanceled!: boolean;
 
   public readonly createAt!: Date;
   public readonly updatedAt!: Date;
+  appointmentToPet: any;
+  appointmentToDoctor: any;
 
   static associate() {
     Appointment.belongsTo(User, {
-        foreignKey: "userId",
-        as: "appointmentOfUserPet"
-    })
+      foreignKey: "userId",
+      as: "appointmentOfUserPet",
+    });
     Appointment.belongsTo(Doctor, {
-        foreignKey: "doctorId",
-        as: "appointmentToDoctor"
-    })
+      foreignKey: "doctorId",
+      as: "appointmentToDoctor",
+    });
     Appointment.belongsTo(Pet, {
-        foreignKey: "petId",
-        as: "appointmentToPet"
-    })
+      foreignKey: "petId",
+      as: "appointmentToPet",
+    });
   }
 }
 
@@ -81,6 +87,12 @@ Appointment.init(
       type: DataTypes.STRING,
       allowNull: false,
       field: "apointment_day",
+    },
+
+    isCanceled: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      field: "is_canceled",
     },
   },
   {

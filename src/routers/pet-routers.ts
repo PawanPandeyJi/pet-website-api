@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  cancleAppointment,
   createAppointment,
   deletePet,
   getAppointments,
@@ -37,13 +38,21 @@ petRouter
   );
 
 petRouter.route("/pet").get(authenticateUser(UserType.User), gettingPetDetails);
+
 petRouter.route("/pet/:id").put(authenticateUser(UserType.User), deletePet);
+
 petRouter.route("/doctors").get(getDoctors);
+
 petRouter
   .route("/appointment")
   .post(authenticateUser(UserType.User), validateUserData(appointmentSchema), createAppointment);
+
 petRouter
   .route("/appointments")
   .get(authenticateUser(UserType.User), getAppointments);
+
+petRouter
+  .route("/appointment/:id")
+  .put(authenticateUser(UserType.User), cancleAppointment);
 
 export default petRouter;

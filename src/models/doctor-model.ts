@@ -18,6 +18,7 @@ export type DoctorAttribute = {
   isDeleted?: boolean;
   isApproved?: boolean;
   userId: string;
+  
 };
 
 export type DoctorCreationAttribute = Omit<DoctorAttribute, "id">;
