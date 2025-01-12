@@ -20,11 +20,12 @@ export const signUp = async (
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       email: req.body.email,
+      type: req.body.type,
     });
 
     await createUser(req.body, user);
 
-    res.status(200).json({ user, accessToken: generateAccessToken(user) });
+    res.status(200).json({ user, token: generateAccessToken(user) });
   } catch (error) {
     res.status(401).json(error);
   }
@@ -33,6 +34,7 @@ export const signUp = async (
 export type LoginReqBody = {
   email: string;
   password: string;
+  type: string;
 };
 
 export const login = async (
@@ -40,11 +42,17 @@ export const login = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { email, password } = req.body;
+    const { email, password, type } = req.body;
     const validCredential = await Credential.findOne({
       where: { email },
-      include: [{ model: User, as: "users", attributes: ["id", "firstName", "lastName", "email"] }],
+      include: [
+        { model: User, as: "users", attributes: ["id", "firstName", "lastName", "email", "type"] },
+      ],
     });
+    if (validCredential?.users?.type !== type) {
+      res.status(401).json({ message: "Invalid credentials" });
+      return;
+    }
     if (!validCredential || !validCredential.users) {
       res.status(401).json({ message: "Invalid credentials" });
       return;

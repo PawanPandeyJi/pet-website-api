@@ -1,6 +1,7 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../utils/db";
 import { User } from "./user-register-model";
+import { Appointment } from "./appointment-model";
 
 export type PetAttributes = {
   id: string;
@@ -39,6 +40,10 @@ export class Pet extends Model<PetAttributes, PetCreationAttribute> implements P
       foreignKey: "userId",
       as: "pet",
     });
+    Pet.hasMany(Appointment, {
+      foreignKey: "petId",
+      as: "petAppointments"
+    })
   }
 }
 
@@ -57,37 +62,30 @@ Pet.init(
     age: {
       type: DataTypes.STRING,
       allowNull: false,
-      field: "pet_age",
     },
     breed: {
       type: DataTypes.STRING,
       allowNull: false,
-      field: "pet_breed",
     },
     weight: {
       type: DataTypes.STRING,
       allowNull: false,
-      field: "pet_weight",
     },
     type: {
       type: DataTypes.STRING,
       allowNull: false,
-      field: "pet_type",
     },
     gender: {
       type: DataTypes.ENUM("male", "female"),
       allowNull: false,
-      field: "pet_gender",
     },
     color: {
       type: DataTypes.STRING,
       allowNull: false,
-      field: "pet_color",
     },
     image: {
       type: DataTypes.STRING,
       allowNull: false,
-      field: "pet_image",
     },
     isDeleted: {
       type: DataTypes.BOOLEAN,
