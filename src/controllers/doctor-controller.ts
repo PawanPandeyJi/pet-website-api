@@ -148,7 +148,7 @@ export const getAppointments = async (req: Request, res: Response): Promise<void
       return;
     }
     const appointments = await Appointment.findAll({
-      where: { doctorId: user.doctorRegistraion.id },
+      where: { doctorId: user.doctorRegistraion.id, isCanceled: false },
       include: [
         {
           model: User,
