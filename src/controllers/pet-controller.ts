@@ -106,6 +106,7 @@ export const deletePet = async (req: Request, res: Response): Promise<void> => {
 export const getDoctors = async (req: Request, res: Response): Promise<void> => {
   try {
     const doctors = await Doctor.findAll({
+      where: { isApproved: true },
       include: [
         { model: DoctorShedule, as: "DoctorShedule" },
         { model: User, as: "userAsDoctor" },

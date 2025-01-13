@@ -42,8 +42,8 @@ export class Pet extends Model<PetAttributes, PetCreationAttribute> implements P
     });
     Pet.hasMany(Appointment, {
       foreignKey: "petId",
-      as: "petAppointments"
-    })
+      as: "petAppointments",
+    });
   }
 }
 

@@ -5,6 +5,9 @@ import { sequelize } from "../utils/db";
 import path from "path";
 import fs from "fs";
 import mime from "mime";
+import { User } from "../models/user-register-model";
+import { Appointment } from "../models/appointment-model";
+import { Pet } from "../models/pet-model";
 
 interface MulterFiles {
   profileImage?: Express.Multer.File[];
@@ -120,5 +123,54 @@ const getImage = (key: string): string => {
       return "";
     }
     throw error;
+  }
+};
+
+export const getAppointments = async (req: Request, res: Response): Promise<void> => {
+  try {
+    if (!req.user) {
+      res.status(409).json({ message: "No logged in user found" });
+      return;
+    }
+    const userId = req.user.id;
+    const authorizedUser = await User.findOne({ where: { id: userId } });
+    if (!authorizedUser) {
+      res.status(401).json({ message: "Unauthrized user!" });
+      return;
+    }
+    const user = (await User.findOne({
+      where: { id: userId },
+      include: [{ model: Doctor, as: "doctorRegistraion", attributes: ["id"] }],
+    })) as User & { doctorRegistraion: { id: string } };
+
+    if (!user) {
+      res.status(401).json({ message: "No Appointments to show!" });
+      return;
+    }
+    const appointments = await Appointment.findAll({
+      where: { doctorId: user.doctorRegistraion.id },
+      include: [
+        {
+          model: User,
+          as: "appointmentOfUserPet",
+        },
+        { model: Pet, as: "appointmentToPet" },
+      ],
+    });
+
+    const appointmentsWithImages = appointments.map((appointment) => {
+      const petImage = appointment.appointmentToPet?.image;
+      const processedImage = petImage ? getImage(petImage) : null;
+
+      return {
+        ...appointment.toJSON(),
+        petImage: processedImage,
+      };
+    });
+
+    res.status(201).json(appointmentsWithImages);
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error!", error });
+    console.log(error);
   }
 };
