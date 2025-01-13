@@ -168,7 +168,7 @@ export const getAppointments = async (req: Request, res: Response): Promise<void
       };
     });
 
-    res.status(201).json(appointmentsWithImages);
+    res.status(200).json(appointmentsWithImages);
   } catch (error) {
     res.status(500).json({ message: "Internal server error!", error });
     console.log(error);
