@@ -1,7 +1,11 @@
 import { Router } from "express";
 import { validateUserData } from "../middlewares/validation-middleware";
 import { doctorValidationSchema } from "../validations/doctor-validation";
-import { registerDoctor, getDoctorDetails } from "../controllers/doctor-controller";
+import {
+  registerDoctor,
+  getDoctorDetails,
+  getAppointments,
+} from "../controllers/doctor-controller";
 import multer from "multer";
 import { authenticateUser } from "../middlewares/token-verification";
 import { UserType } from "../models/user-register-model";
@@ -29,5 +33,6 @@ doctorRouter
   );
 
 doctorRouter.route("/doctor").get(authenticateUser(UserType.Doctor), getDoctorDetails);
+doctorRouter.route("/doctor/appointments").get(authenticateUser(UserType.Doctor), getAppointments);
 
 export default doctorRouter;
