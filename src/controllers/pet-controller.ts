@@ -7,6 +7,7 @@ import { User } from "../models/user-register-model";
 import { Doctor } from "../models/doctor-model";
 import { DoctorShedule } from "../models/doctor-shedule-model";
 import { Appointment, AppointmentCreationAttribute } from "../models/appointment-model";
+import { socketIo } from "../index";
 export const petRegistration = async (
   req: Request<Record<string, string>, void, PetCreationAttribute>,
   res: Response
@@ -174,6 +175,7 @@ export const getAppointments = async (req: Request, res: Response): Promise<void
         },
         { model: Pet, as: "appointmentToPet" },
       ],
+      order: [["createdAt", "ASC"]],
     });
 
     const appointmentsWithImages = appointments.map((appointment) => {
@@ -217,6 +219,65 @@ export const cancleAppointment = async (req: Request, res: Response): Promise<vo
     );
 
     res.status(200).json(cancel);
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error!", error });
+    console.log(error);
+  }
+};
+
+export const joinAppointment = async (req: Request, res: Response): Promise<void> => {
+  try {
+    if (!req.user) {
+      res.status(409).json({ message: "No logged in user found" });
+      return;
+    }
+    const userId = req.user.id;
+    const authorizedUser = await User.findOne({ where: { id: userId } });
+    if (!authorizedUser) {
+      res.status(401).json({ message: "Unauthrized user!" });
+      return;
+    }
+    const id = req.params.id;
+
+    const join = await Appointment.update({ canJoin: true }, { where: { id, canJoin: false } });
+
+    if (join[0] > 0) {
+      const updatedAppointment = await Appointment.findOne({ where: { id } });
+      socketIo.emit("appointmentUpdatedOnConnect", updatedAppointment);
+    }
+
+    res.status(200).json(join);
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error!", error });
+    console.log(error);
+  }
+};
+
+export const disconnectUser = async (req: Request, res: Response): Promise<void> => {
+  try {
+    if (!req.user) {
+      res.status(409).json({ message: "No logged in user found" });
+      return;
+    }
+    const userId = req.user.id;
+    const authorizedUser = await User.findOne({ where: { id: userId } });
+    if (!authorizedUser) {
+      res.status(401).json({ message: "Unauthrized user!" });
+      return;
+    }
+    const id = req.params.id;
+
+    const disconnect = await Appointment.update(
+      { canJoin: false },
+      { where: { id, canJoin: true } }
+    );
+
+    if (disconnect[0] > 0) {
+      const updatedAppointment = await Appointment.findOne({ where: { id } });
+      socketIo.emit("appointmentUpdatedOnDisconnect", updatedAppointment);
+    }
+
+    res.status(200).json(disconnect);
   } catch (error) {
     res.status(500).json({ message: "Internal server error!", error });
     console.log(error);

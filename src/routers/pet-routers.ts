@@ -3,9 +3,11 @@ import {
   cancleAppointment,
   createAppointment,
   deletePet,
+  disconnectUser,
   getAppointments,
   getDoctors,
   gettingPetDetails,
+  joinAppointment,
   petRegistration,
 } from "../controllers/pet-controller";
 import { authenticateUser } from "../middlewares/token-verification";
@@ -54,5 +56,13 @@ petRouter
 petRouter
   .route("/appointment/:id")
   .put(authenticateUser(UserType.User), cancleAppointment);
+
+  petRouter
+  .route("/joinAppointment/:id")
+  .put(authenticateUser(UserType.User), joinAppointment);
+
+  petRouter
+  .route("/disconnect/:id")
+  .put(authenticateUser(UserType.User), disconnectUser);
 
 export default petRouter;

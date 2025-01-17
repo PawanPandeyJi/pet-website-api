@@ -156,6 +156,7 @@ export const getAppointments = async (req: Request, res: Response): Promise<void
         },
         { model: Pet, as: "appointmentToPet" },
       ],
+      order: [["createdAt", "ASC"]],
     });
 
     const appointmentsWithImages = appointments.map((appointment) => {
