@@ -214,9 +214,10 @@ export const cancleAppointment = async (req: Request, res: Response): Promise<vo
     const id = req.params.id;
 
     const cancel = await Appointment.update(
-      { isCanceled: true },
+      { isCanceled: true, canJoin: false },
       { where: { id, isCanceled: false } }
     );
+    socketIo.emit("cancelAppointment", cancel);
 
     res.status(200).json(cancel);
   } catch (error) {

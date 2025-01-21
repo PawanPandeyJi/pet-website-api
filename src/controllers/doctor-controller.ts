@@ -1,4 +1,4 @@
-import { Request, response, Response } from "express";
+import { Request, Response } from "express";
 import { Doctor, DoctorCreationAttribute } from "../models/doctor-model";
 import { DoctorShedule, DoctorSheduleCreationAttribute } from "../models/doctor-shedule-model";
 import { sequelize } from "../utils/db";
@@ -32,6 +32,7 @@ export const registerDoctor = async (
     const userId = req.user.id;
     const files = req.files as MulterFiles;
     if (!files.profileImage || !files.certificateImage) {
+      1;
       res.status(400).json("No file uploaded!");
       return;
     }
@@ -128,7 +129,7 @@ const getImage = (key: string): string => {
 
 export const getAppointments = async (req: Request, res: Response): Promise<void> => {
   try {
-    if (!req.user) {
+    if (!req.user?.id) {
       res.status(409).json({ message: "No logged in user found" });
       return;
     }

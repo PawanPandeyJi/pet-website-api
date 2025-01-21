@@ -15,6 +15,7 @@ import { Doctor } from "./models/doctor-model";
 import { DoctorShedule } from "./models/doctor-shedule-model";
 import doctorRouter from "./routers/doctor-router";
 import { Appointment } from "./models/appointment-model";
+import { disconnectUser } from "./controllers/pet-controller";
 
 const app = express();
 
@@ -42,7 +43,7 @@ socketIo.on("connection", (socket) => {
     userId = arg;
     console.log("Connected USER ID:", arg);
   });
-  socket.on("disconnect", () => {
+  socket.on("disconnect", async () => {
     console.log("user disconnected....", userId);
   });
 });
