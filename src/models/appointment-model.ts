@@ -11,8 +11,10 @@ export type AppointmentAttribute = {
   petId: string;
   appointmentDay: string;
   isCanceled?: boolean;
+  canJoin?: boolean;
   appointmentToPet?: {};
   appointmentToDoctor?: {};
+  createdAt?: Date;
 };
 
 export type AppointmentCreationAttribute = Omit<AppointmentAttribute, "id">;
@@ -27,6 +29,7 @@ export class Appointment
   public petId!: string;
   public appointmentDay!: string;
   public isCanceled!: boolean;
+  public canJoin!: boolean;
 
   public readonly createAt!: Date;
   public readonly updatedAt!: Date;
@@ -93,6 +96,11 @@ Appointment.init(
       type: DataTypes.BOOLEAN,
       defaultValue: false,
       field: "is_canceled",
+    },
+    canJoin: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      field: "can_join",
     },
   },
   {
