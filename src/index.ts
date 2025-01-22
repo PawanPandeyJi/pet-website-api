@@ -16,12 +16,18 @@ import { DoctorShedule } from "./models/doctor-shedule-model";
 import doctorRouter from "./routers/doctor-router";
 import { Appointment } from "./models/appointment-model";
 import { disconnectUser } from "./controllers/pet-controller";
+import { Message } from "./models/message.model";
+import { Room } from "./models/room.model";
+import roomRouter from "./routers/room-router";
+import messageRouter from "./routers/message-router";
+import morgan from "morgan";
 
 const app = express();
 
 app.use(express.json());
 app.use(express.static("./images"));
 
+app.use(morgan("dev"));
 const corsPolicy = {
   origin: "*",
   methods: "GET,POST,PUT,PATCH,DELETE,HEAD",
@@ -52,6 +58,8 @@ app.get("/health", healthController);
 app.use("/auth/", authRouter);
 app.use(petRouter);
 app.use(doctorRouter);
+app.use(roomRouter);
+app.use(messageRouter);
 
 sequelize
   .sync({ alter: true })
@@ -72,3 +80,5 @@ Pet.associate();
 Doctor.associate();
 DoctorShedule.associate();
 Appointment.associate();
+Message.associate();
+Room.associate();
