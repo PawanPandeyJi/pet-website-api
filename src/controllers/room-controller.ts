@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Room } from "../models/room.model";
 import { Op } from "sequelize";
+import { socketIo } from "../index";
 
 export const getRooms = async (req: Request, res: Response) => {
   try {
@@ -21,7 +22,7 @@ export const getRooms = async (req: Request, res: Response) => {
             },
           ],
         },
-      }),
+      })
     );
   } catch (e) {
     console.error(e);
@@ -30,11 +31,8 @@ export const getRooms = async (req: Request, res: Response) => {
 };
 
 export const createRoom = async (
-  req: Request<
-    Record<string, string>,
-    { participant: string; appointmentId: string }
-  >,
-  res: Response,
+  req: Request<Record<string, string>, { participant: string; appointmentId: string }>,
+  res: Response
 ) => {
   try {
     if (!req.user?.id) {
@@ -45,10 +43,10 @@ export const createRoom = async (
       where: {
         [Op.and]: [
           {
-            participant1: req.user.id,
+            [Op.or]: [{ participant1: req.user.id }, { participant1: req.body.participant }],
           },
           {
-            participant2: req.body.participant,
+            [Op.or]: [{ participant2: req.user.id }, { participant2: req.body.participant }],
           },
           {
             appointmentId: req.body.appointmentId,
@@ -65,6 +63,13 @@ export const createRoom = async (
       participant2: req.body.participant,
       appointmentId: req.body.appointmentId,
     });
+
+    if (room) {
+      socketIo.emit("askToJoin", {});
+    } else {
+      res.status(500).json({ message: "Failed to create room" });
+      return;
+    }
 
     res.status(201).json(room);
   } catch (e) {

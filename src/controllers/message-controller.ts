@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { Room } from "../models/room.model";
 import { Op } from "sequelize";
 import { Message } from "../models/message.model";
+import { socketIo } from "..";
 
 export const getMessages = async (req: Request, res: Response) => {
   try {
@@ -22,12 +23,14 @@ export const getMessages = async (req: Request, res: Response) => {
           as: "messages",
         },
       ],
+      order: [["createdAt", "ASC"]],
     });
 
     if (!room) {
       res.status(404).json({ message: "Room not found" });
       return;
     }
+
     res.status(200).json(room.messages);
   } catch (error) {
     res.status(500).json({ message: "Internal server error!", error });
@@ -35,7 +38,7 @@ export const getMessages = async (req: Request, res: Response) => {
   }
 };
 
-export const createMessage = async (req: Request, res: Response) => {
+export const createMessage = async (req: Request, res: Response): Promise<void> => {
   try {
     const roomId = req.params.roomId;
     const userId = req.user?.id;
@@ -59,6 +62,11 @@ export const createMessage = async (req: Request, res: Response) => {
       roomId: roomId,
       senderId: userId,
     });
+
+    if (message) {
+      socketIo.emit("messageUpdatedOnCreate", {});
+    }
+
     res.status(201).json(message);
   } catch (error) {
     res.status(500).json({ message: "Internal server error!", error });

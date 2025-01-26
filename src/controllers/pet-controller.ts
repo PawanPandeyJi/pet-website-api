@@ -8,6 +8,8 @@ import { Doctor } from "../models/doctor-model";
 import { DoctorShedule } from "../models/doctor-shedule-model";
 import { Appointment, AppointmentCreationAttribute } from "../models/appointment-model";
 import { socketIo } from "../index";
+
+
 export const petRegistration = async (
   req: Request<Record<string, string>, void, PetCreationAttribute>,
   res: Response
