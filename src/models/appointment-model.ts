@@ -3,6 +3,7 @@ import { Model, DataTypes } from "sequelize";
 import { User } from "./user-register-model";
 import { Doctor } from "./doctor-model";
 import { Pet } from "./pet-model";
+import { Prescription } from "./prescription-model";
 
 export type AppointmentAttribute = {
   id: string;
@@ -51,6 +52,10 @@ export class Appointment
       foreignKey: "petId",
       as: "appointmentToPet",
     });
+    Appointment.hasOne(Prescription, {
+      foreignKey: "appointmentId",
+      as: "prescriptionForAppointment"
+    })
   }
 }
 
