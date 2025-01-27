@@ -9,7 +9,7 @@ export type MedicineDosageAttributes = {
   dose: string;
   drugForm: string;
   duration: string;
-  medicineId: string;
+  medicineId?: string;
 };
 
 export type MedicineDosageCreationAttribute = Omit<MedicineDosageAttributes, "id">;

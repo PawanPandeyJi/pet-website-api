@@ -3,18 +3,18 @@ import { sequelize } from "../utils/db";
 import { Appointment } from "./appointment-model";
 import { Medicine } from "./medicine-model";
 
-export type DescriptionAttributes = {
+export type PrescriptionAttributes = {
   id: string;
   diagnosis: string;
   remarks: string;
   appointmentId: string;
 };
 
-export type DescriptionCreationAttribute = Omit<DescriptionAttributes, "id">;
+export type PrescriptionCreationAttribute = Omit<PrescriptionAttributes, "id">;
 
 export class Prescription
-  extends Model<DescriptionAttributes, DescriptionCreationAttribute>
-  implements DescriptionAttributes
+  extends Model<PrescriptionAttributes, PrescriptionCreationAttribute>
+  implements PrescriptionAttributes
 {
   public id!: string;
   public diagnosis!: string;

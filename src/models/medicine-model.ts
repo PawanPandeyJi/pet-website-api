@@ -6,7 +6,7 @@ import { Dosage } from "./medicineDosage-model";
 export type MedicineAttributes = {
   id: string;
   drugName: string;
-  prescriptionId: string;
+  prescriptionId?: string;
 };
 
 export type MedicineCreationAttribute = Omit<MedicineAttributes, "id">;
