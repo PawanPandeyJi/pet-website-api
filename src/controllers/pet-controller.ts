@@ -9,7 +9,6 @@ import { DoctorShedule } from "../models/doctor-shedule-model";
 import { Appointment, AppointmentCreationAttribute } from "../models/appointment-model";
 import { socketIo } from "../index";
 
-
 export const petRegistration = async (
   req: Request<Record<string, string>, void, PetCreationAttribute>,
   res: Response
@@ -271,8 +270,8 @@ export const disconnectUser = async (req: Request, res: Response): Promise<void>
     const id = req.params.id;
 
     const disconnect = await Appointment.update(
-      { canJoin: false },
-      { where: { id, canJoin: true } }
+      { canJoin: false, isChatEnded: true },
+      { where: { id, canJoin: true, isChatEnded: false } }
     );
 
     if (disconnect[0] > 0) {
