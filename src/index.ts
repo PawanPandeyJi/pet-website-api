@@ -23,7 +23,6 @@ import messageRouter from "./routers/message-router";
 import morgan from "morgan";
 import { Prescription } from "./models/prescription-model";
 import { Medicine } from "./models/medicine-model";
-import { Dosage } from "./models/medicineDosage-model";
 import prescriptionRouter from "./routers/prescription-router";
 
 const app = express();
@@ -91,4 +90,3 @@ Message.associate();
 Room.associate();
 Prescription.associate();
 Medicine.associate();
-Dosage.associate();

@@ -1,11 +1,15 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../utils/db";
 import { Prescription } from "./prescription-model";
-import { Dosage } from "./medicineDosage-model";
 
 export type MedicineAttributes = {
   id: string;
   drugName: string;
+  doseTime: string;
+  frequency: string;
+  dose: string;
+  drugForm: string;
+  duration: string;
   prescriptionId?: string;
 };
 
@@ -17,6 +21,11 @@ export class Medicine
 {
   public id!: string;
   public drugName!: string;
+  public doseTime!: string;
+  public frequency!: string;
+  public dose!: string;
+  public drugForm!: string;
+  public duration!: string;
   public prescriptionId!: string;
 
   public readonly createAt!: Date;
@@ -27,10 +36,6 @@ export class Medicine
       foreignKey: "prescriptionId",
       as: "prescriptionOfMedicine",
     });
-    Medicine.hasOne(Dosage, {
-        foreignKey: "medicineId",
-        as: "dosageOfMedicine"
-    })
   }
 }
 
@@ -47,6 +52,33 @@ Medicine.init(
       allowNull: false,
       field: "drug_name",
     },
+
+    doseTime: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        field: "dose_time"
+      },
+  
+      frequency: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+  
+      dose: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+  
+      drugForm: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        field: "drug_form"
+      },
+  
+      duration: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
 
     prescriptionId: {
       type: DataTypes.UUID,
