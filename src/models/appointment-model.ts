@@ -3,6 +3,7 @@ import { Model, DataTypes } from "sequelize";
 import { User } from "./user-register-model";
 import { Doctor } from "./doctor-model";
 import { Pet } from "./pet-model";
+import { Prescription } from "./prescription-model";
 
 export type AppointmentAttribute = {
   id: string;
@@ -13,6 +14,7 @@ export type AppointmentAttribute = {
   isCanceled?: boolean;
   canJoin?: boolean;
   isChatEnded?: boolean;
+  isPrescribed?: boolean;
   appointmentToPet?: {};
   appointmentToDoctor?: {};
   createdAt?: Date;
@@ -32,6 +34,7 @@ export class Appointment
   public isCanceled!: boolean;
   public canJoin!: boolean;
   public isChatEnded!: boolean;
+  public isPrescribed!: boolean;
 
   public readonly createAt!: Date;
   public readonly updatedAt!: Date;
@@ -50,6 +53,10 @@ export class Appointment
     Appointment.belongsTo(Pet, {
       foreignKey: "petId",
       as: "appointmentToPet",
+    });
+    Appointment.hasOne(Prescription, {
+      foreignKey: "appointmentId",
+      as: "prescriptionForAppointment",
     });
   }
 }
@@ -105,11 +112,17 @@ Appointment.init(
       defaultValue: false,
       field: "can_join",
     },
-    
+
     isChatEnded: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
       field: "is_chat_ended",
+    },
+
+    isPrescribed: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      field: "is_prescribed",
     },
   },
   {

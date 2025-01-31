@@ -21,6 +21,9 @@ import { Room } from "./models/room.model";
 import roomRouter from "./routers/room-router";
 import messageRouter from "./routers/message-router";
 import morgan from "morgan";
+import { Prescription } from "./models/prescription-model";
+import { Medicine } from "./models/medicine-model";
+import prescriptionRouter from "./routers/prescription-router";
 
 const app = express();
 
@@ -60,6 +63,7 @@ app.use(petRouter);
 app.use(doctorRouter);
 app.use(roomRouter);
 app.use(messageRouter);
+app.use(prescriptionRouter);
 
 sequelize
   .sync({ alter: true })
@@ -74,6 +78,8 @@ const PORT = process.env.PORT;
 httpServer.listen(PORT, () => {
   console.log(`server is running on port ${PORT}`);
 });
+
+
 User.associate();
 Credential.associate();
 Pet.associate();
@@ -82,3 +88,5 @@ DoctorShedule.associate();
 Appointment.associate();
 Message.associate();
 Room.associate();
+Prescription.associate();
+Medicine.associate();
