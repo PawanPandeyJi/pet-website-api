@@ -47,7 +47,7 @@ export const createPrescription = async (
   }
 };
 
-export const getPrescription = async (
+export const getPrescriptions = async (
   req: Request<Record<string, string>, void, void>,
   res: Response
 ): Promise<void> => {
