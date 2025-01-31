@@ -5,6 +5,7 @@ import { sequelize } from "../utils/db";
 import { Appointment } from "../models/appointment-model";
 import { Doctor } from "../models/doctor-model";
 import { Op } from "sequelize";
+import { socketIo } from "../index";
 
 export const createPrescription = async (
   req: Request<
@@ -32,11 +33,13 @@ export const createPrescription = async (
       })),
       { transaction: prescriptionTransaction }
     );
+
     if (created) {
       await Appointment.update(
         { isPrescribed: true },
         { where: { id: appointmentId, isPrescribed: false }, transaction: prescriptionTransaction }
       );
+      socketIo.emit("refetchOnPrecriptionUpload", {});
     }
 
     await prescriptionTransaction.commit();
@@ -59,7 +62,34 @@ export const getPrescriptions = async (
     const prescribedAppointmets = await Appointment.findAll({
       where: { doctorId: doctorRegistrationId?.id, isPrescribed: true },
     });
+
     const appointmentIds = prescribedAppointmets.map((appointment) => appointment.id);
+
+    const prescriptionDetails = await Prescription.findAll({
+      where: { appointmentId: { [Op.in]: appointmentIds } },
+      include: { model: Medicine, as: "medicineOfPrescription" },
+      order: [["createdAt", "ASC"]],
+    });
+
+    res.status(200).json(prescriptionDetails);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+export const getPrescriptionsForUser = async (
+  req: Request<Record<string, string>, void, void>,
+  res: Response
+): Promise<void> => {
+  try {
+    const userId = req.user?.id;
+
+    const prescribedAppointmets = await Appointment.findAll({
+      where: { userId, isPrescribed: true },
+    });
+
+    const appointmentIds = prescribedAppointmets.map((appointment) => appointment.id);
+
     const prescriptionDetails = await Prescription.findAll({
       where: { appointmentId: { [Op.in]: appointmentIds } },
       include: { model: Medicine, as: "medicineOfPrescription" },

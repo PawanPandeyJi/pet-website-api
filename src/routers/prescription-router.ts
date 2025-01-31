@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { authenticateUser } from "../middlewares/token-verification";
 import { UserType } from "../models/user-register-model";
-import { createPrescription, getPrescriptions } from "../controllers/prescription-controllers";
+import { createPrescription, getPrescriptions, getPrescriptionsForUser } from "../controllers/prescription-controllers";
 
 const prescriptionRouter = Router();
 
@@ -17,6 +17,13 @@ prescriptionRouter
   .get(
     authenticateUser(UserType.Doctor),
     getPrescriptions
+  );
+
+  prescriptionRouter
+  .route("/userPrescription")
+  .get(
+    authenticateUser(UserType.User),
+    getPrescriptionsForUser
   );
 
 export default prescriptionRouter;
